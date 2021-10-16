@@ -19,7 +19,7 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images:
-            trickbooter/alpine-hello
+            ghcr.io/trickbooter/alpine-hello
           flavor: |
             latest=false
           tags: |
