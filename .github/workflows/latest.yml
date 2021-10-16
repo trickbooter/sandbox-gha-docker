@@ -3,6 +3,8 @@ name: DockerHub
 on:
   release:
     types: [published]
+  schedule:
+    - cron: '*/5 * * * *'
 
 jobs:
   # Push image to GitHub Packages.
@@ -15,6 +17,7 @@ jobs:
         uses: actions/checkout@v2
       - 
         name: Docker meta
+        if: github.event.action == 'published'
         id: meta
         uses: docker/metadata-action@v3
         with:
@@ -25,6 +28,16 @@ jobs:
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
+      - 
+        name: Docker meta
+        if: github.event.action == 'cron'
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images:
+            ghcr.io/trickbooter/alpine-hello
+          flavor: |
+            latest=auto
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
